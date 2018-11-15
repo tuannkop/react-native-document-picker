@@ -1,5 +1,5 @@
 #import "RNDocumentPicker.h"
-
+#import <MobileCoreServices/MobileCoreServices.h>
 #if __has_include(<React/RCTConvert.h>)
 #import <React/RCTConvert.h>
 #import <React/RCTBridge.h>
@@ -33,7 +33,9 @@ RCT_EXPORT_METHOD(show:(NSDictionary *)options
 
     NSArray *allowedUTIs = [RCTConvert NSArray:options[@"filetype"]];
     
-    UIDocumentMenuViewController *documentPicker = [[UIDocumentMenuViewController alloc] initWithDocumentTypes:(NSArray *)allowedUTIs inMode:UIDocumentPickerModeImport];
+    NSString *uti1 = CFBridgingRelease(UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, (__bridge CFStringRef _Nonnull)(@"gcode"), nil));
+    
+    UIDocumentMenuViewController *documentPicker = [[UIDocumentMenuViewController alloc] initWithDocumentTypes:@[(NSString*)kUTTypeItem,uti1] inMode:UIDocumentPickerModeImport];
 
     [[self composeCallbacks] addObject:callback];
 
